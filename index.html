@@ -1,0 +1,524 @@
+<?php
+declare(strict_types=1);
+header('X-Robots-Tag: noindex, nofollow, noarchive');
+
+function h(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
+function media_list(string $dir, array $exts): array {
+    $base = __DIR__ . '/media/' . $dir;
+    if (!is_dir($base)) return [];
+    $out = [];
+    foreach (scandir($base) as $f) {
+        if ($f === '' || $f[0] === '.') continue;
+        $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+        if (!in_array($ext, $exts, true)) continue;
+        $out[$f] = filemtime($base . '/' . $f) ?: 0;
+    }
+    arsort($out); // 新しいファイルが先頭
+    return array_keys($out);
+}
+function media_url(string $dir, string $f): string { return 'media/' . $dir . '/' . rawurlencode($f); }
+
+$photos = media_list('gallery', ['jpg', 'jpeg', 'png', 'webp']);
+$videos = media_list('video', ['mp4']);
+$hasHero   = is_file(__DIR__ . '/media/hero.mp4');
+$hasPoster = is_file(__DIR__ . '/media/hero.jpg');
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>春泳会｜春日市の大人の水泳サークル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --mist:#F2F8F8; --aqua:#A8D8DB; --teal:#2F7C85; --blush:#F4D3CC; --blush-d:#B86F64;
+  --ink:#33434B; --muted:#6B7E86; --line:#E3EEEF;
+  --wed-bg:#EAF5F0; --wed:#3C8A70; --sat-bg:#EAF0F8; --sat:#46699C;
+  --card:#FFFFFF; --shadow:0 12px 40px rgba(47,124,133,.10);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1B1F; --mist:#15262B; --aqua:#3F6F74; --teal:#86CBD1; --blush:#4A3431; --blush-d:#E9A99E;
+    --ink:#E4EEF0; --muted:#9DB1B7; --line:#223A40;
+    --wed-bg:#16302A; --wed:#8FD1B7; --sat-bg:#18253A; --sat:#9DB9E6; --card:#15262B; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1B1F; --mist:#15262B; --aqua:#3F6F74; --teal:#86CBD1; --blush:#4A3431; --blush-d:#E9A99E;
+  --ink:#E4EEF0; --muted:#9DB1B7; --line:#223A40;
+  --wed-bg:#16302A; --wed:#8FD1B7; --sat-bg:#18253A; --sat:#9DB9E6; --card:#15262B; --shadow:none;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+  font-weight:500;line-height:1.9;font-size:16px;letter-spacing:.03em;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:8px}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:600;letter-spacing:.08em}
+h2{font-size:clamp(1.45rem,4.2vw,1.9rem);line-height:1.5;margin:0 0 .8em}
+h3{margin:0}
+section{padding:88px 0}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:"Shippori Mincho",serif;font-weight:600;font-size:1.25rem;text-decoration:none;letter-spacing:.14em;display:flex;gap:10px;align-items:center}
+.logo svg{width:26px;height:26px}
+.btn-line{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;text-decoration:none;font-weight:700;
+  border-radius:999px;padding:12px 24px;font-size:.95rem;border:0;cursor:pointer;letter-spacing:.04em}
+.btn-line:hover{filter:brightness(1.05)}
+.top .btn-line{padding:7px 16px;font-size:.85rem}
+
+/* hero: text + arch window onto the water */
+.hero{padding:40px 0 72px;background:linear-gradient(180deg,var(--bg) 0%,var(--mist) 100%)}
+.hero-grid{display:grid;gap:36px;align-items:center;grid-template-columns:1.05fr .95fr}
+@media (max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-media{order:-1}}
+.hero h1{font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 20px}
+.hero p.lead{font-size:1rem;max-width:30em;margin:0 0 28px;color:var(--muted)}
+.hero-media{position:relative;aspect-ratio:4/5;max-height:560px;width:100%;border-radius:999px 999px 28px 28px;overflow:hidden;
+  background:var(--aqua);box-shadow:var(--shadow)}
+@media (max-width:760px){.hero-media{aspect-ratio:1/1;max-width:420px;margin:0 auto}}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{display:none}
+.pool{position:absolute;inset:0;background:
+   radial-gradient(60% 40% at 30% 30%,rgba(255,255,255,.55),transparent 60%),
+   radial-gradient(50% 35% at 70% 75%,rgba(255,255,255,.4),transparent 60%),
+   linear-gradient(180deg,#CDEBEC,#9FD2D6)}
+.caustics{position:absolute;inset:-20%;opacity:.5;mix-blend-mode:screen;
+  background:repeating-radial-gradient(circle at 30% 40%,transparent 0 18px,rgba(255,255,255,.6) 19px,transparent 23px),
+             repeating-radial-gradient(circle at 70% 60%,transparent 0 24px,rgba(255,255,255,.45) 25px,transparent 30px);
+  animation:drift 20s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(4%,-3%) scale(1.06)}}
+.rope{position:absolute;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(90deg,#fff 0 10px,#8CC6CE 10px 20px)}
+.rope.r1{top:30%} .rope.r2{top:70%}
+.next{display:inline-block;background:var(--card);border-radius:22px;padding:18px 24px;min-width:min(100%,340px);box-shadow:var(--shadow)}
+.next small{display:block;color:var(--muted);font-size:.8rem}
+.next strong{display:block;font-size:1.25rem;font-weight:700;line-height:1.5}
+.next .when{display:inline-block;margin-top:6px;font-weight:700;font-size:.9rem;color:var(--teal);border-radius:999px;padding:3px 14px;background:var(--mist)}
+.next .when.live{color:var(--blush-d);background:var(--blush)}
+.next .note{margin-top:10px;font-size:.75rem;color:var(--muted);line-height:1.6}
+
+/* about */
+.points{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:36px}
+.point h3{font-size:1.1rem;margin-bottom:6px;padding-top:14px;position:relative}
+.point h3::before{content:"";position:absolute;top:0;left:0;width:28px;height:2px;background:var(--aqua)}
+.point p{margin:0;color:var(--muted)}
+
+/* quiz */
+.quiz{background:var(--mist);border-radius:28px;padding:32px 24px}
+.q{display:none}.q.on{display:block}
+.q h3{font-size:1.15rem;margin-bottom:18px}
+.opts{display:grid;gap:10px}
+.opts button{font:inherit;font-weight:500;text-align:left;padding:15px 20px;border-radius:16px;border:1.5px solid transparent;
+  background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .15s,transform .15s}
+.opts button:hover{border-color:var(--aqua)}
+.opts button:active{transform:scale(.985)}
+.prog{display:flex;gap:6px;margin-bottom:20px;max-width:120px}
+.prog i{height:4px;flex:1;border-radius:2px;background:var(--line)}
+.prog i.done{background:var(--teal)}
+.result{animation:pop .35s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.result .tag{display:inline-block;font-weight:700;border-radius:999px;padding:4px 16px;margin-bottom:12px}
+.result p{margin:0 0 18px}
+.linkbtn{font:inherit;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;margin-left:12px}
+
+/* lanes */
+.lanes{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.lane{background:var(--lb);border-radius:28px;padding:28px 26px;scroll-margin-top:80px;border:1.5px solid transparent;transition:border-color .2s}
+.lane.hl{border-color:var(--c)}
+.lane-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.lane-head .day{font-family:"Shippori Mincho",serif;font-size:2rem;font-weight:600;color:var(--c);line-height:1.2}
+.lane-head .lv{font-size:.9rem;color:var(--muted)}
+.lane-body .catch{font-weight:700;margin:0 0 12px}
+.dist{margin:16px 0 20px}
+.dist .bar{position:relative;height:6px;border-radius:3px;background:color-mix(in srgb,var(--c) 15%,var(--card))}
+.dist .fill{position:absolute;top:0;bottom:0;border-radius:3px;background:var(--c)}
+.dist .scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:4px}
+.dist .lbl{font-size:.9rem;font-weight:700;margin-bottom:6px}
+.lane ul{padding-left:1.2em;margin:0 0 18px}
+dl.fee{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0;padding:16px 18px;border-radius:18px;background:var(--card)}
+dl.fee dt{color:var(--muted);font-size:.9rem}
+dl.fee dd{margin:0;font-weight:700}
+.meets{margin:16px 0 0;font-size:.88rem;color:var(--muted)}
+
+/* voices */
+.voices{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 24px 16px;margin:0 -24px;scrollbar-width:thin}
+.voice{flex:0 0 min(80%,300px);scroll-snap-align:start;background:var(--mist);border-radius:24px;padding:24px}
+.voice p{margin:0 0 12px}
+.voice p::before{content:"“";font-family:"Shippori Mincho",serif;font-size:2rem;line-height:0;vertical-align:-.45em;margin-right:4px;color:var(--aqua)}
+.voice span{font-size:.82rem;color:var(--muted)}
+
+/* faq */
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-weight:700;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:10px;top:50%;width:9px;height:9px;border-right:1.5px solid var(--teal);
+  border-bottom:1.5px solid var(--teal);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+details[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+details p{margin:0 0 20px;color:var(--muted)}
+
+/* access + cta */
+.access{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
+.card{background:var(--mist);border-radius:28px;padding:28px 26px}
+.btn-sub{display:inline-block;margin-top:14px;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px;padding:9px 22px;text-decoration:none;font-weight:700;font-size:.92rem}
+.steps{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:14px}
+.steps li{display:flex;gap:14px;align-items:center}
+.steps b{flex:0 0 34px;height:34px;border-radius:50%;background:var(--card);color:var(--teal);display:grid;place-items:center;font-weight:700}
+.cta{background:linear-gradient(160deg,var(--mist),color-mix(in srgb,var(--blush) 45%,var(--mist)));text-align:center;border-radius:32px;padding:48px 24px}
+.cta h2{margin-bottom:.4em}
+.cta p{color:var(--muted)}
+.cta .steps{max-width:320px;margin:24px auto 28px;text-align:left}
+
+footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82rem}
+
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+  background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;gap:10px;align-items:center;justify-content:center;transform:translateY(110%);transition:transform .3s;
+  box-shadow:0 -1px 0 var(--line)}
+.dock.show{transform:none}
+.dock .btn-line{flex:1;max-width:420px;justify-content:center;padding:13px}
+.dock span{font-size:.8rem;color:var(--muted);display:none}
+@media (min-width:720px){.dock span{display:block}}
+
+/* gallery */
+.gallery{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.ph{padding:0;border:0;background:var(--mist);border-radius:18px;overflow:hidden;aspect-ratio:1;cursor:zoom-in}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.ph:hover img{transform:scale(1.03)}
+.gallery:not(.all) .ph.more{display:none}
+#showMore{font:inherit;font-weight:700;background:none;cursor:pointer}
+.videos{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:24px}
+.videos video{width:100%;border-radius:22px;background:var(--mist);aspect-ratio:16/9}
+dialog#lightbox{border:0;padding:0;background:transparent;max-width:min(94vw,1100px);max-height:90vh}
+dialog#lightbox::backdrop{background:rgba(242,248,248,.94)}
+#lbImg{display:block;max-width:100%;max-height:82vh;border-radius:18px;margin:0 auto;box-shadow:0 20px 60px rgba(47,124,133,.2)}
+#lbClose{display:block;margin:14px auto 0;font:inherit;font-weight:700;color:var(--teal);background:#fff;border:0;border-radius:999px;padding:8px 24px;cursor:pointer}
+.map{margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
+.map iframe{width:100%;height:100%;border:0;display:block}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="春泳会 トップへ">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#A8D8DB"/><path d="M5 18c3-3 5-3 7 0s4 3 7 0 5-3 8 0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M5 23c3-3 5-3 7 0s4 3 7 0 5-3 8 0" stroke="#F4D3CC" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+      春泳会
+    </a>
+    <a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener">無料体験</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <h1>きれいに、楽に、<br>長く泳ぐ。</h1>
+        <p class="lead">春泳会は、福岡県春日市の温水プールで毎週水曜・土曜に練習している大人の水泳サークルです。20代から80代まで、25m泳げる方からマスターズ大会を目指す方まで、クラスに分かれて泳いでいます。</p>
+        <div class="next" aria-live="polite">
+        <small>次の練習</small>
+        <strong id="nextName">—</strong>
+        <span class="when" id="nextWhen">計算中</span>
+        <div class="note">祝日や施設の休館日は変わることがあります。確実な日程は公式LINEで確認してください。</div>
+      </div>
+      </div>
+      <div class="hero-media">
+    <?php if ($hasHero): ?>
+    <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="metadata"<?= $hasPoster ? ' poster="media/hero.jpg"' : '' ?>>
+      <source src="media/hero.mp4" type="video/mp4">
+    </video>
+    <div class="shade"></div>
+    <?php else: ?>
+    <div class="pool"></div><div class="caustics"></div>
+    <div class="rope r1"></div><div class="rope r2"></div>
+    <?php endif; ?>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2>春泳会について</h2>
+      <p>日本マスターズ水泳協会に登録している、大人向けの水泳サークルです。18歳以上なら、年齢を問わず参加できます。いま新しいメンバーを募集しています。</p>
+      <div class="points">
+        <div class="point"><h3>指導歴30年のコーチ</h3><p>泳ぎの課題を見て、直すポイントを具体的に伝えます。</p></div>
+        <div class="point"><h3>拍手し合えるチーム</h3><p>お互いの挑戦を認め合う、温かい雰囲気です。</p></div>
+        <div class="point"><h3>レベル別のメニュー</h3><p>レベルに合わせてメニューとコースを分けて練習します。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="check" style="padding-top:0">
+    <div class="wrap">
+      <h2>どちらのクラスが合う？</h2>
+      <div class="quiz" id="quiz">
+        <div class="prog"><i></i><i></i></div>
+        <div class="q on" data-q="1">
+          <h3>いま、続けて何mくらい泳げますか？</h3>
+          <div class="opts">
+            <button data-a="short">25〜50mくらい</button>
+            <button data-a="long">100m以上</button>
+            <button data-a="short">しばらく泳いでいない</button>
+          </div>
+        </div>
+        <div class="q" data-q="2">
+          <h3>春泳会でやってみたいことは？</h3>
+          <div class="opts">
+            <button data-a="form">フォームをきれいにして、楽に泳ぎたい</button>
+            <button data-a="race">たくさん泳ぎ込みたい・大会に出てみたい</button>
+            <button data-a="form">健康のために、無理なく続けたい</button>
+          </div>
+        </div>
+        <div class="q" data-q="3" id="result"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="classes" style="padding-top:0">
+    <div class="wrap">
+      <h2>クラスと料金</h2>
+      <div class="lanes">
+        <article class="lane" id="wed" style="--c:var(--wed);--lb:var(--wed-bg)">
+          <div class="lane-head"><div class="day">水曜</div><div class="lv">初中級　19:40〜20:40</div></div>
+          <div class="lane-body">
+            <p class="catch">自己流を卒業して、きれいに楽に泳ぐ</p>
+            <div class="dist">
+              <div class="lbl">1回 500〜1,000m</div>
+              <div class="bar"><div class="fill" style="left:0;width:33%"></div></div>
+              <div class="scale"><span>0</span><span>1,500m</span><span>3,000m</span></div>
+            </div>
+            <ul>
+              <li>25〜50m程度泳げる方</li>
+              <li>ブランクがある方</li>
+              <li>4泳法を最初から学びたい方</li>
+              <li>自己流を見直したい方</li>
+            </ul>
+            <dl class="fee"><dt>月謝</dt><dd>4,000円</dd><dt>都度参加</dt><dd>1,500円</dd></dl>
+            <p class="meets">フォーム練習とドリルが中心。休憩をとりながら、ゆっくり泳ぎます。</p>
+          </div>
+        </article>
+        <article class="lane" id="sat" style="--c:var(--sat);--lb:var(--sat-bg)">
+          <div class="lane-head"><div class="day">土曜</div><div class="lv">上級　19:40〜21:10</div></div>
+          <div class="lane-body">
+            <p class="catch">泳ぎ込みとスピード練習で、自己ベストへ</p>
+            <div class="dist">
+              <div class="lbl">1回 2,000〜3,000m</div>
+              <div class="bar"><div class="fill" style="left:66%;width:34%"></div></div>
+              <div class="scale"><span>0</span><span>1,500m</span><span>3,000m</span></div>
+            </div>
+            <ul>
+              <li>100m泳げる方</li>
+              <li>泳ぎ込みをしたい方</li>
+              <li>マスターズ大会に出てみたい方</li>
+              <li>自己ベストを目指したい方</li>
+            </ul>
+            <dl class="fee"><dt>月謝</dt><dd>3,000円</dd><dt>都度参加</dt><dd>1,000円</dd></dl>
+            <p class="meets">出場している大会：日本マスターズ水泳短水路大会、全九州マスターズスイミングフェスティバル、熊本マスターズ水泳競技大会、かすやスイムカーニバル ほか県内の大会。大会に出ない方も参加できます。</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="voices" style="padding-top:0">
+    <div class="wrap">
+      <h2>参加している人の声</h2>
+      <div class="voices" tabindex="0" aria-label="参加者の声（横にスクロール）">
+        <div class="voice"><p>25m泳ぐと息切れしていたのが、楽に50m泳げるようになりました。</p><span>50代女性・水曜</span></div>
+        <div class="voice"><p>クロールしか泳げなかったけど、背泳ぎや平泳ぎも泳げるようになりました。</p><span>40代女性・水曜</span></div>
+        <div class="voice"><p>中学まで水泳部。40年のブランクを経て再開し、自己ベスト更新が目標です。</p><span>50代女性・水曜</span></div>
+        <div class="voice"><p>入って25年。4泳法泳げるようになり、水泳のおかげで元気に暮らしています。</p><span>80代女性・水曜</span></div>
+        <div class="voice"><p>大手スポーツクラブにも通っていますが、竹井コーチのレッスンがわかりやすいので参加しています。</p><span>60代男性・水曜</span></div>
+      </div>
+    </div>
+  </section>
+
+  <?php if ($photos || $videos): ?>
+  <section id="gallery" style="padding-top:0">
+    <div class="wrap">
+      <h2>練習の様子</h2>
+      <?php if ($photos): ?>
+      <div class="gallery" id="gallery-grid">
+        <?php foreach ($photos as $i => $f): ?>
+        <button type="button" class="ph<?= $i >= 9 ? ' more' : '' ?>" data-src="<?= h(media_url('gallery', $f)) ?>" aria-label="写真を拡大（<?= $i + 1 ?>枚目）">
+          <img src="<?= h(media_url('gallery', $f)) ?>" alt="春泳会の練習の様子" loading="lazy" decoding="async">
+        </button>
+        <?php endforeach; ?>
+      </div>
+      <?php if (count($photos) > 9): ?>
+      <button type="button" class="btn-sub" id="showMore">写真をすべて見る（<?= count($photos) ?>枚）</button>
+      <?php endif; ?>
+      <?php endif; ?>
+      <?php if ($videos): ?>
+      <div class="videos">
+        <?php foreach ($videos as $f):
+          $poster = pathinfo($f, PATHINFO_FILENAME) . '.jpg';
+          $hasP = is_file(__DIR__ . '/media/video/' . $poster); ?>
+        <video controls playsinline preload="metadata"<?= $hasP ? ' poster="' . h(media_url('video', $poster)) . '"' : '' ?>>
+          <source src="<?= h(media_url('video', $f)) ?>" type="video/mp4">
+        </video>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
+    </div>
+  </section>
+  <dialog id="lightbox" aria-label="写真の拡大表示">
+    <img id="lbImg" alt="春泳会の練習の様子">
+    <button type="button" id="lbClose">閉じる</button>
+  </dialog>
+  <?php endif; ?>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <h2>よくある質問</h2>
+      <details><summary>まったくの初心者でも参加できますか？</summary><p>25m程度泳げる方が対象です。水泳経験が少ない方やブランクのある方は、水曜の練習に参加しています。</p></details>
+      <details><summary>何歳くらいの人が参加していますか？</summary><p>20代から80代まで、幅広い年代の方が参加しています。</p></details>
+      <details><summary>水曜と土曜、両方参加しないといけませんか？</summary><p>いいえ。どちらか一方だけ参加している方が多いです。</p></details>
+      <details><summary>マスターズ大会に出ないといけませんか？</summary><p>いいえ。健康づくりや泳ぎの上達のために参加している方もいます。</p></details>
+      <details><summary>見学や体験はできますか？</summary><p>できます。公式LINEから希望する曜日を送ってください。</p></details>
+    </div>
+  </section>
+
+  <section id="access" style="padding-top:0">
+    <div class="wrap access">
+      <div class="card">
+        <h2>活動場所</h2>
+        <p style="margin:0"><b>春日市総合スポーツセンター温水プール</b><br>福岡県春日市大谷6-28-1</p>
+        <p style="margin:8px 0 0;color:var(--muted)">毎週水曜・土曜に活動しています。コースの使い方は体験のときにお伝えします。</p>
+        <div class="map"><iframe src="https://maps.google.com/maps?q=33.526708,130.45622&amp;z=16&amp;output=embed" title="春日市総合スポーツセンターの地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <a class="btn-sub" href="https://www.google.com/maps?q=33.526708,130.45622" target="_blank" rel="noopener">地図アプリで開く</a>
+      </div>
+      <div class="card">
+        <h2>練習の様子</h2>
+        <p style="margin:0">週2回、実際の練習メニューや雰囲気をInstagramに載せています。</p>
+        <a class="btn-sub" href="https://www.instagram.com/kasuga_swim" target="_blank" rel="noopener">Instagramを見る</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="join" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta">
+        <h2>まずは無料で体験・見学</h2>
+        <p style="margin:0">雰囲気を知りたい方、クラス選びを相談したい方も歓迎です。</p>
+        <ol class="steps">
+          <li><b>1</b>公式LINEを友だち追加</li>
+          <li><b>2</b>希望の曜日（水曜 or 土曜）を送る</li>
+          <li><b>3</b>当日プールへ</li>
+        </ol>
+        <a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener" style="padding:14px 32px;font-size:1.05rem">公式LINEで申し込む</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 春泳会（しゅんえいかい）　福岡県春日市</div>
+</footer>
+
+<div class="dock" id="dock">
+  <span>水曜・土曜 19:40〜　無料体験あり</span>
+  <a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener">公式LINEで無料体験を申し込む</a>
+</div>
+
+<script>
+(function(){
+  /* ---- next practice ---- */
+  var sched=[{d:3,s:[19,40],e:[20,40],n:'水曜クラス（初中級）'},{d:6,s:[19,40],e:[21,10],n:'土曜クラス（上級）'}];
+  var wd=['日','月','火','水','木','金','土'];
+  function pad(n){return (n<10?'0':'')+n}
+  function update(){
+    var now=new Date(),best=null;
+    for(var add=0;add<8&&!best;add++){
+      var day=new Date(now.getFullYear(),now.getMonth(),now.getDate()+add);
+      sched.forEach(function(c){
+        if(best||day.getDay()!==c.d)return;
+        var st=new Date(day);st.setHours(c.s[0],c.s[1],0,0);
+        var en=new Date(day);en.setHours(c.e[0],c.e[1],0,0);
+        if(now<en)best={c:c,st:st,en:en,add:add};
+      });
+    }
+    if(!best)return;
+    var t=best.c.s[0]+':'+pad(best.c.s[1])+'〜'+best.c.e[0]+':'+pad(best.c.e[1]);
+    var w=document.getElementById('nextWhen');
+    document.getElementById('nextName').textContent=best.c.n;
+    if(now>=best.st){w.textContent='いま練習中（'+best.c.e[0]+':'+pad(best.c.e[1])+'まで）';w.classList.add('live');}
+    else{
+      w.classList.remove('live');
+      var lbl=best.add===0?'今日':best.add===1?'明日':'あと'+best.add+'日';
+      w.textContent=lbl+'　'+(best.st.getMonth()+1)+'/'+best.st.getDate()+'（'+wd[best.st.getDay()]+'） '+t;
+    }
+  }
+  update();setInterval(update,60000);
+
+  /* ---- class check ---- */
+  var quiz=document.getElementById('quiz'),ans={},bars=quiz.querySelectorAll('.prog i');
+  function show(n){quiz.querySelectorAll('.q').forEach(function(q){q.classList.toggle('on',q.dataset.q==n)});}
+  quiz.addEventListener('click',function(e){
+    var b=e.target.closest('.opts button');
+    if(b){
+      var q=b.closest('.q').dataset.q;ans[q]=b.dataset.a;bars[q-1].classList.add('done');
+      if(q==1)show(2);else render();
+    }
+    if(e.target.id==='retry'){ans={};bars.forEach(function(i){i.classList.remove('done')});
+      document.querySelectorAll('.lane').forEach(function(l){l.classList.remove('hl')});show(1);}
+  });
+  function render(){
+    var sat=ans[1]==='long'&&ans[2]==='race';
+    var mixed=(ans[1]==='long')!==(ans[2]==='race');
+    var id=sat?'sat':'wed';
+    var html='<div class="result"><span class="tag" style="color:var(--'+id+');background:var(--'+id+'-bg)">'+(sat?'土曜クラス':'水曜クラス')+'がおすすめ</span>'
+      +'<p>'+(sat?'泳ぎ込みとスピード練習で、2,000〜3,000m泳ぎます。マスターズ大会を目指すならこちらです。'
+      :'フォーム練習とドリルが中心。休憩しながら500〜1,000m泳ぎます。')
+      +(mixed?'迷ったら、体験のときにコーチに相談できます。':'')+'</p>'
+      +'<a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener">'+(sat?'土曜':'水曜')+'の体験を申し込む</a>'
+      +'<button class="linkbtn" id="retry" type="button">もう一度</button>'
+      +' <a class="linkbtn" href="#'+id+'">詳しく見る</a></div>';
+    document.getElementById('result').innerHTML=html;show(3);
+    document.querySelectorAll('.lane').forEach(function(l){l.classList.toggle('hl',l.id===id)});
+  }
+
+  /* ---- sticky LINE bar after hero ---- */
+  var dock=document.getElementById('dock'),hero=document.querySelector('.hero'),join=document.getElementById('join');
+  if('IntersectionObserver' in window){
+    var heroVis=true,joinVis=false;
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.target===hero)heroVis=e.isIntersecting;else joinVis=e.isIntersecting;});
+      dock.classList.toggle('show',!heroVis&&!joinVis);});
+    io.observe(hero);io.observe(join);
+  }else dock.classList.add('show');
+
+  /* ---- gallery / lightbox / hero video ---- */
+  var lb=document.getElementById('lightbox');
+  if(lb){
+    var lbImg=document.getElementById('lbImg');
+    document.querySelectorAll('.ph').forEach(function(b){b.addEventListener('click',function(){
+      lbImg.src=b.dataset.src; if(lb.showModal)lb.showModal(); else window.open(b.dataset.src,'_blank');});});
+    document.getElementById('lbClose').addEventListener('click',function(){lb.close()});
+    lb.addEventListener('click',function(e){if(e.target===lb)lb.close()});
+  }
+  var more=document.getElementById('showMore');
+  if(more)more.addEventListener('click',function(){document.getElementById('gallery-grid').classList.add('all');more.remove();});
+  var hv=document.getElementById('heroVideo');
+  if(hv&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){hv.removeAttribute('autoplay');hv.pause();}
+})();
+</script>
+</body>
+</html>
