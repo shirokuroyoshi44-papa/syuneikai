@@ -17,18 +17,6 @@
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F1B1F; --mist:#15262B; --aqua:#3F6F74; --teal:#86CBD1; --blush:#4A3431; --blush-d:#E9A99E;
-    --ink:#E4EEF0; --muted:#9DB1B7; --line:#223A40;
-    --wed-bg:#16302A; --wed:#8FD1B7; --sat-bg:#18253A; --sat:#9DB9E6; --card:#15262B; --shadow:none;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0F1B1F; --mist:#15262B; --aqua:#3F6F74; --teal:#86CBD1; --blush:#4A3431; --blush-d:#E9A99E;
-  --ink:#E4EEF0; --muted:#9DB1B7; --line:#223A40;
-  --wed-bg:#16302A; --wed:#8FD1B7; --sat-bg:#18253A; --sat:#9DB9E6; --card:#15262B; --shadow:none;
-}
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
