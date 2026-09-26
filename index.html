@@ -195,8 +195,10 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
 .dock span{font-size:.8rem;color:var(--muted);display:none}
 @media (min-width:720px){.dock span{display:block}}
 
-.map{margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
-.map iframe{width:100%;height:100%;border:0;display:block}
+.map-frame{display:block;margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line);position:relative}
+.map-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.map-frame .pin{position:absolute;right:12px;bottom:12px;background:rgba(255,255,255,.92);color:var(--teal);
+  font-size:.76rem;font-weight:700;border-radius:999px;padding:6px 14px;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -402,7 +404,10 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
         <h2>活動場所</h2>
         <p style="margin:0"><b>春日市総合スポーツセンター温水プール</b><br>福岡県春日市大谷6-28-1</p>
         <p style="margin:8px 0 0;color:var(--muted)">毎週水曜・土曜に活動しています。コースの使い方は体験のときにお伝えします。</p>
-        <div class="map"><iframe src="https://maps.google.com/maps?q=33.526708,130.45622&amp;z=16&amp;output=embed" title="春日市総合スポーツセンターの地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <a class="map-frame" href="https://www.google.com/maps?q=33.526708,130.45622" target="_blank" rel="noopener" aria-label="Googleマップで開く">
+          <img src="https://staticmap.openstreetmap.de/staticmap.php?center=33.526708,130.45622&amp;zoom=16&amp;size=600x450&amp;maptype=mapnik&amp;markers=33.526708,130.45622,red-pushpin" alt="春日市総合スポーツセンター温水プールの地図" loading="lazy">
+          <span class="pin">📍地図アプリで開く</span>
+        </a>
         <a class="btn-sub" href="https://www.google.com/maps?q=33.526708,130.45622" target="_blank" rel="noopener">地図アプリで開く</a>
       </div>
       <div class="card">
