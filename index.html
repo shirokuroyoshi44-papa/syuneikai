@@ -49,21 +49,16 @@ section{padding:88px 0}
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
 .logo{font-family:"Shippori Mincho",serif;font-weight:600;font-size:1.25rem;text-decoration:none;letter-spacing:.14em;display:flex;gap:10px;align-items:center}
-.logo img{width:32px;height:32px;object-fit:cover;border-radius:50%}
+.logo img{width:36px;height:36px;object-fit:cover;border-radius:50%}
 .btn-line{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;text-decoration:none;font-weight:700;
   border-radius:999px;padding:12px 24px;font-size:.95rem;border:0;cursor:pointer;letter-spacing:.04em}
 .btn-line:hover{filter:brightness(1.05)}
 .top .btn-line{padding:7px 16px;font-size:.85rem}
 
-/* hero: text + full width arch window onto the water */
-.hero{padding:40px 0 72px;background:linear-gradient(180deg,var(--bg) 0%,var(--mist) 100%)}
-.hero-grid{display:grid;gap:36px;align-items:center;grid-template-columns:1.05fr .95fr}
-@media (max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-media{order:-1}}
-.hero h1{font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 20px}
-.hero p.lead{font-size:1rem;max-width:30em;margin:0 0 28px;color:var(--muted)}
-.hero-media{position:relative;aspect-ratio:16/9;width:100%;border-radius:24px;overflow:hidden;
-  background:var(--aqua);box-shadow:var(--shadow)}
-@media (max-width:760px){.hero-media{aspect-ratio:4/3}}
+/* hero: full-width water area at the top */
+.hero{padding:0 0 72px;background:linear-gradient(180deg,var(--mist) 0%,var(--bg) 100%)}
+.hero-media{position:relative;width:100vw;margin-left:calc(50% - 50vw);height:280px;background:var(--aqua);overflow:hidden;box-shadow:var(--shadow);margin-bottom:48px}
+@media (min-width:768px){.hero-media{height:380px}}
 .pool{position:absolute;inset:0;background:
    radial-gradient(60% 40% at 30% 30%,rgba(255,255,255,.55),transparent 60%),
    radial-gradient(50% 35% at 70% 75%,rgba(255,255,255,.4),transparent 60%),
@@ -76,7 +71,11 @@ section{padding:88px 0}
 .rope{position:absolute;left:0;right:0;height:6px;
   background:repeating-linear-gradient(90deg,#fff 0 10px,#8CC6CE 10px 20px)}
 .rope.r1{top:30%} .rope.r2{top:70%}
-.next{display:inline-block;background:var(--card);border-radius:22px;padding:18px 24px;min-width:min(100%,340px);box-shadow:var(--shadow)}
+
+.hero-content{text-align:center;max-width:800px;margin:0 auto;padding:0 24px}
+.hero h1{font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 16px}
+.hero p.lead{font-size:1rem;margin:0 auto 28px;color:var(--muted)}
+.next{display:inline-block;background:var(--card);border-radius:22px;padding:18px 24px;min-width:min(100%,340px);box-shadow:var(--shadow);text-align:left}
 .next small{display:block;color:var(--muted);font-size:.8rem}
 .next strong{display:block;font-size:1.25rem;font-weight:700;line-height:1.5}
 .next .when{display:inline-block;margin-top:6px;font-weight:700;font-size:.9rem;color:var(--teal);border-radius:999px;padding:3px 14px;background:var(--mist)}
@@ -179,7 +178,7 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="春泳会 トップへ">
-      <img src="logo.png" alt="春泳会ロゴ">
+      <img src="syuneikai-logo.png" alt="春泳会ロゴ">
       春泳会
     </a>
     <a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener">無料体験</a>
@@ -188,23 +187,22 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
 
 <main id="top">
   <section class="hero">
-    <div class="wrap">
-      <div style="margin-bottom:36px; text-align:center;">
-        <h1 style="font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 16px;">きれいに、楽に、長く泳ぐ。</h1>
-        <p class="lead" style="margin:0 auto 28px; max-width:40em;">春泳会は、福岡県春日市の温水プールで毎週水曜・土曜に練習している大人の水泳サークルです。20代から80代まで、25m泳げる方からマスターズ大会を目指す方まで、クラスに分かれて泳いでいます。</p>
-        <div class="next" aria-live="polite" style="display:inline-block; text-align:left;">
-          <small>次の練習</small>
-          <strong id="nextName">—</strong>
-          <span class="when" id="nextWhen">計算中</span>
-          <div class="note">祝日や施設の休館日は変わることがあります。確実な日程は公式LINEで確認してください。</div>
-        </div>
-      </div>
-      <!-- 画面いっぱいの動く水面 -->
-      <div class="hero-media">
-        <div class="pool"></div>
-        <div class="caustics"></div>
-        <div class="rope r1"></div>
-        <div class="rope r2"></div>
+    <!-- 画面いっぱいの動く水面（ヘッダーのすぐ下に配置） -->
+    <div class="hero-media">
+      <div class="pool"></div>
+      <div class="caustics"></div>
+      <div class="rope r1"></div>
+      <div class="rope r2"></div>
+    </div>
+    
+    <div class="hero-content">
+      <h1>きれいに、楽に、長く泳ぐ。</h1>
+      <p class="lead">春泳会は、福岡県春日市の温水プールで毎週水曜・土曜に練習している大人の水泳サークルです。20代から80代まで、25m泳げる方からマスターズ大会を目指す方まで、クラスに分かれて泳いでいます。</p>
+      <div class="next" aria-live="polite">
+        <small>次の練習</small>
+        <strong id="nextName">—</strong>
+        <span class="when" id="nextWhen">計算中</span>
+        <div class="note">祝日や施設の休館日は変わることがあります。確実な日程は公式LINEで確認してください。</div>
       </div>
     </div>
   </section>
@@ -383,7 +381,7 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
     if(now>=best.st){w.textContent='いま練習中（'+best.c.e[0]+':'+pad(best.c.e[1])+'まで）';w.classList.add('live');}
     else{
       w.classList.remove('live');
-      var lbl=best.add===0?'今天':best.add===1?'明日':'あと'+best.add+'日';
+      var lbl=best.add===0?'今日':best.add===1?'明日':'あと'+best.add+'日';
       w.textContent=lbl+' '+(best.st.getMonth()+1)+'/'+best.st.getDate()+'（'+wd[best.st.getDay()]+'） '+t;
     }
   }
