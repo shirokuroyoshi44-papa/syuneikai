@@ -104,7 +104,9 @@ section{padding:88px 0}
 }
 
 .hero-content{text-align:center;max-width:800px;margin:0 auto;padding:0 24px}
-.hero h1{font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 16px}
+.hero h1{font-size:clamp(2rem,6.4vw,3.1rem);line-height:1.55;margin:0 0 16px;
+  /* 各行末の句読点（、。）が持つ右側のアキ分だけ右へ寄せ、視覚的な中心を合わせる */
+  transform:translateX(.25em)}
 .hero p.lead{font-size:1rem;margin:0 auto 28px;color:var(--muted)}
 .next{display:inline-block;background:var(--card);border-radius:22px;padding:18px 24px;min-width:min(100%,340px);box-shadow:var(--shadow);text-align:left}
 .next small{display:block;color:var(--muted);font-size:.8rem}
@@ -186,19 +188,33 @@ details p{margin:0 0 20px;color:var(--muted)}
 
 footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82rem}
 
-/* dock */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
-  background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  display:flex;gap:10px;align-items:center;justify-content:center;transform:translateY(110%);transition:transform .3s;
-  box-shadow:0 -1px 0 var(--line)}
-.dock.show{transform:none}
-.dock .btn-line{flex:1;max-width:420px;justify-content:center;padding:13px}
-.dock span{font-size:.8rem;color:var(--muted);display:none}
-@media (min-width:720px){.dock span{display:block}}
-/* Googleサイトのiframe埋め込みではsafe-area(env)が0になり、
-   iOS SafariのURLバーにボタンが潜り込むため、スマホ幅で最低余白を確保 */
-@media (max-width:719px){
-  .dock{padding-bottom:calc(10px + max(env(safe-area-inset-bottom,0px), 30px))}
+/* floating LINE button：スマホ・50代以上でも一目で分かる大きめラベル付き */
+.fab{position:fixed;z-index:30;
+  right:14px;bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 8px));
+  display:inline-flex;align-items:center;gap:11px;
+  background:#06C755;color:#fff;text-decoration:none;
+  border-radius:16px;padding:13px 20px 13px 13px;
+  box-shadow:0 12px 30px rgba(6,199,85,.5),0 3px 8px rgba(0,0,0,.15);
+  opacity:0;transform:translateY(20px) scale(.94);pointer-events:none;
+  transition:opacity .3s,transform .3s}
+.fab.show{opacity:1;transform:none;pointer-events:auto;
+  animation:fab-pulse 2.6s ease-in-out infinite}
+.fab:hover{filter:brightness(1.05)}
+.fab:active{transform:scale(.97)}
+/* 「LINE」ワードマーク風の白バッジ（LINEだと一目で伝わる） */
+.fab .fab-badge{background:#fff;color:#06C755;font-weight:800;
+  font-size:.92rem;letter-spacing:.02em;line-height:1;
+  padding:8px 11px;border-radius:11px;flex:0 0 auto}
+.fab .fab-text{font-weight:800;font-size:1.2rem;letter-spacing:.04em;line-height:1.2;text-align:left}
+.fab .fab-text small{display:block;font-weight:700;font-size:.72rem;letter-spacing:0;opacity:.95;margin-top:3px}
+/* 注目を促すやわらかな明滅（prefers-reduced-motion では自動停止） */
+@keyframes fab-pulse{
+  0%,100%{box-shadow:0 12px 30px rgba(6,199,85,.5),0 3px 8px rgba(0,0,0,.15),0 0 0 0 rgba(6,199,85,.5)}
+  50%{box-shadow:0 12px 30px rgba(6,199,85,.5),0 3px 8px rgba(0,0,0,.15),0 0 0 13px rgba(6,199,85,0)}
+}
+@media (min-width:720px){
+  .fab{padding:14px 24px 14px 15px}
+  .fab .fab-text{font-size:1.25rem}
 }
 
 .map-frame{position:relative;margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
@@ -461,10 +477,10 @@ h2{text-align:center}
   <div class="wrap">© 春泳会（しゅんえいかい） 福岡県春日市</div>
 </footer>
 
-<div class="dock" id="dock">
-  <span>水曜・土曜 19:40〜 無料体験あり</span>
-  <a class="btn-line" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener">公式LINEで無料体験を申し込む</a>
-</div>
+<a class="fab" id="fab" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener" aria-label="公式LINEで無料体験・見学を申し込む">
+  <span class="fab-badge">LINE</span>
+  <span class="fab-text">無料体験<small>見学・相談OK</small></span>
+</a>
 
 <script>
 (function(){
@@ -524,14 +540,14 @@ h2{text-align:center}
   }
 
   /* ---- sticky LINE bar after hero ---- */
-  var dock=document.getElementById('dock'),hero=document.querySelector('.hero'),join=document.getElementById('join');
+  var fab=document.getElementById('fab'),hero=document.querySelector('.hero'),join=document.getElementById('join');
   if('IntersectionObserver' in window){
     var heroVis=true,joinVis=false;
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       if(e.target===hero)heroVis=e.isIntersecting;else joinVis=e.isIntersecting;});
-      dock.classList.toggle('show',!heroVis&&!joinVis);});
+      fab.classList.toggle('show',!heroVis&&!joinVis);});
     io.observe(hero);io.observe(join);
-  }else dock.classList.add('show');
+  }else fab.classList.add('show');
 })();
 </script>
 </body>
