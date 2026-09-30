@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>春泳会｜春日市の大人の水泳サークル</title>
+<script>/* iOS Chrome(CriOS)を判定してクラス付与（下バーが高いためボタン位置を別調整） */
+if(/CriOS/.test(navigator.userAgent))document.documentElement.classList.add('is-crios');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
@@ -217,10 +219,14 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
   .fab .fab-text{font-size:1.25rem}
 }
 /* スマホ（Googleサイト等のiframe埋め込み）では env が 0 になり下バーに隠れる。
-   Chrome(iOS)の下部ツールバーはSafariより背が高いため、両対応できるよう
-   下からの位置を十分に持ち上げる（数値を上げるほど上に移動） */
+   iOSはSafari/Chromeともに同じWebKitのためCSSでは判別不可 →
+   head の JS で iOS Chrome に .is-crios を付与し、下からの位置を別々に指定する。
+   （数値を上げるほど上に移動） */
 @media (max-width:719px){
-  .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 100px))}
+  /* Safari など通常のスマホブラウザ：控えめの持ち上げ */
+  .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 48px))}
+  /* iOS Chrome：下部ツールバーが高いので大きめに持ち上げ */
+  html.is-crios .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 90px))}
 }
 
 .map-frame{position:relative;margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
