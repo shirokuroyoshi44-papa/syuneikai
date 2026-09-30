@@ -195,9 +195,34 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
 .dock .btn-line{flex:1;max-width:420px;justify-content:center;padding:13px}
 .dock span{font-size:.8rem;color:var(--muted);display:none}
 @media (min-width:720px){.dock span{display:block}}
+/* Googleサイトのiframe埋め込みではsafe-area(env)が0になり、
+   iOS SafariのURLバーにボタンが潜り込むため、スマホ幅で最低余白を確保 */
+@media (max-width:719px){
+  .dock{padding-bottom:calc(10px + max(env(safe-area-inset-bottom,0px), 30px))}
+}
 
 .map-frame{position:relative;margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
 .map-frame iframe{width:100%;height:100%;border:0;display:block}
+
+/* --- 中央寄せ調整（見出し・リード文・カード） --- */
+h2{text-align:center}
+/* 各セクションの導入文（.wrap直下の段落）を中央に */
+#about>.wrap>p{text-align:center;max-width:640px;margin-left:auto;margin-right:auto}
+/* about：特徴カードを中央寄せ、上の飾りバーも中央へ */
+.points{justify-items:center}
+.point{max-width:320px;text-align:center}
+.point h3{padding-top:16px}
+.point h3::before{left:50%;transform:translateX(-50%)}
+/* クラス診断：設問見出しとバーを中央（選択肢ボタンは読みやすさ優先で左のまま） */
+.q h3{text-align:center}
+.prog{margin-left:auto;margin-right:auto}
+/* クラスカード：見出し・キャッチを中央（箇条書き・料金表は左のまま） */
+.lane-head{justify-content:center;text-align:center}
+.lane-body .catch{text-align:center}
+/* 参加者の声：中央寄せ */
+.voice{text-align:center}
+/* アクセス／SNSカード：中央寄せ */
+.access .card{text-align:center}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -276,7 +301,7 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
         </svg>
       </div>
     </div>
-    
+
     <div class="hero-content">
       <h1>きれいに、<br>楽に、<br>長く泳ぐ。</h1>
       <p class="lead">春泳会は、福岡県春日市の温水プールで毎週水曜・土曜に練習している大人の水泳サークルです。20代から80代まで、25m泳げる方からマスターズ大会を目指す方まで、クラスに分かれて泳いでいます。</p>
