@@ -3,7 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>春泳会｜春日市の大人の水泳サークル</title>
+<title>春泳会｜春日市の大人の水泳サークル（初心者・シニア歓迎）</title>
+<meta name="description" content="春泳会は福岡県春日市の温水プールで活動する大人の水泳サークルです。春日市・大野城市・福岡市近郊から20〜80代が参加。スイミング初心者・シニア・ブランクのある方も歓迎、指導歴30年のコーチが丁寧に指導します。毎週水曜・土曜、無料体験・見学を受付中。">
+<meta name="robots" content="index,follow">
+<!-- ▼ 公開URLに合わせて2か所書き換えてください（GitHub Pagesなら Settings→Pages のURL） -->
+<link rel="canonical" href="https://shirokuroyoshi44-papa.github.io/syuneikai/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="春泳会｜春日市の大人の水泳サークル（初心者・シニア歓迎）">
+<meta property="og:description" content="福岡県春日市の温水プールで活動する大人の水泳サークル。春日市・大野城市・福岡市近郊から20〜80代が参加。初心者・シニアも歓迎、無料体験・見学受付中。">
+<meta property="og:url" content="https://shirokuroyoshi44-papa.github.io/syuneikai/">
+<meta property="og:image" content="https://shirokuroyoshi44-papa.github.io/syuneikai/syuneikai-logo.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="春泳会">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SportsActivityLocation",
+  "name":"春泳会（しゅんえいかい）",
+  "description":"福岡県春日市の温水プールで活動する大人の水泳サークル。初心者・シニア・マスターズ大会を目指す方まで、レベル別に練習しています。",
+  "url":"https://shirokuroyoshi44-papa.github.io/syuneikai/",
+  "image":"https://shirokuroyoshi44-papa.github.io/syuneikai/syuneikai-logo.png",
+  "sport":"Swimming",
+  "address":{
+    "@type":"PostalAddress",
+    "streetAddress":"大谷6-28-1",
+    "addressLocality":"春日市",
+    "addressRegion":"福岡県",
+    "postalCode":"816-0862",
+    "addressCountry":"JP"
+  },
+  "geo":{"@type":"GeoCoordinates","latitude":33.526708,"longitude":130.45622},
+  "areaServed":["春日市","大野城市","福岡市","那珂川市"],
+  "audience":{"@type":"PeopleAudience","suggestedMinAge":18},
+  "openingHoursSpecification":[
+    {"@type":"OpeningHoursSpecification","dayOfWeek":"Wednesday","opens":"19:40","closes":"20:40"},
+    {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"19:40","closes":"21:10"}
+  ],
+  "sameAs":["https://www.instagram.com/kasuga_swim","https://lin.ee/8lRhwSj"]
+}
+</script>
 <script>/* iOS Chrome(CriOS)を判定してクラス付与（下バーが高いためボタン位置を別調整） */
 if(/CriOS/.test(navigator.userAgent))document.documentElement.classList.add('is-crios');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,6 +228,11 @@ details p{margin:0 0 20px;color:var(--muted)}
 .cta .steps{max-width:320px;margin:24px auto 28px;text-align:left}
 
 footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82rem}
+footer p{margin:0}
+footer .foot-name{font-weight:700;color:var(--ink)}
+footer .foot-note{margin-top:6px;font-size:.75rem;line-height:1.7}
+footer .copyright{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);letter-spacing:.06em}
+footer .copyright small{font-size:.78rem}
 
 /* floating LINE button：スマホ・50代以上でも一目で分かる大きめラベル付き */
 .fab{position:fixed;z-index:30;
@@ -226,7 +270,7 @@ footer{padding:48px 0 130px;text-align:center;color:var(--muted);font-size:.82re
   /* Safari など通常のスマホブラウザ：控えめの持ち上げ */
   .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 48px))}
   /* iOS Chrome：下部ツールバーが高いので大きめに持ち上げ */
-  html.is-crios .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 100px))}
+  html.is-crios .fab{bottom:calc(16px + max(env(safe-area-inset-bottom,0px), 90px))}
 }
 
 .map-frame{position:relative;margin-top:18px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
@@ -252,6 +296,43 @@ h2{text-align:center}
 /* アクセス／SNSカード：中央寄せ */
 .access .card{text-align:center}
 
+/* --- 写真（トップ・動画ブロック・活動場所） --- */
+/* トップ：集合写真＋流れるテロップ */
+.hero-photo{width:100%;height:100%;object-fit:cover;display:block}
+.hero-tint{position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(0,0,0,.20));pointer-events:none}
+.marquee{position:absolute;left:0;right:0;bottom:0;z-index:3;height:44px;display:flex;align-items:center;
+  overflow:hidden;white-space:nowrap;background:color-mix(in srgb,var(--teal) 92%,transparent);color:#fff}
+.marquee .track{display:inline-flex;white-space:nowrap;will-change:transform;animation:marq 26s linear infinite}
+.marquee .track span{padding:0 2.4em;font-weight:700;font-size:1rem;letter-spacing:.05em}
+.marquee .track span b{color:#EAFBF0;font-weight:800}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* 動画でフォームチェック */
+.sub-lead{text-align:center;color:var(--muted);margin:-.3em 0 30px;font-size:.98rem}
+.formcheck{background:var(--mist);border-radius:28px;padding:24px;display:grid;gap:24px;grid-template-columns:1fr}
+@media(min-width:760px){.formcheck{grid-template-columns:1.1fr 1fr;align-items:center;padding:32px}}
+.fc-media{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);aspect-ratio:16/9}
+.fc-media img{width:100%;height:100%;object-fit:cover;display:block}
+.fc-badge{position:absolute;right:12px;top:12px;background:color-mix(in srgb,var(--teal) 92%,transparent);
+  color:#fff;font-weight:700;font-size:.78rem;padding:6px 12px;border-radius:999px;letter-spacing:.04em}
+.fc-catch{font-family:"Shippori Mincho",serif;font-weight:600;font-size:1.2rem;color:var(--teal);margin:0 0 12px;line-height:1.5}
+.fc-body p{margin:0 0 16px}
+.fc-points{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.fc-points li{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;color:var(--ink)}
+.fc-points li::before{content:"";flex:0 0 16px;height:16px;margin-top:6px;border-radius:50%;background:var(--aqua);
+  box-shadow:inset 0 0 0 4px var(--mist),inset 0 0 0 6px var(--teal)}
+/* 実際の撮影映像（水中・水上） */
+.fc-sample{margin-top:28px;text-align:center}
+.fc-sample-title{font-family:"Shippori Mincho",serif;font-weight:600;font-size:1.15rem;color:var(--teal);margin:0 0 6px}
+.fc-sample-lead{color:var(--muted);font-size:.92rem;margin:0 0 18px}
+.fc-shots{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:560px){.fc-shots{grid-template-columns:1fr 1fr}}
+.fc-shot{margin:0;text-align:left}
+.fc-shot .fc-media{border-radius:16px}
+.fc-shot figcaption{margin-top:10px;font-size:.9rem;color:var(--ink);line-height:1.6}
+.fc-shot figcaption b{color:var(--teal)}
+/* 活動場所の施設写真 */
+.place-photo{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:18px;display:block;margin:4px 0 14px}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -271,62 +352,15 @@ h2{text-align:center}
 
 <main id="top">
   <section class="hero">
-    <!-- 画面いっぱいの動く水面（ヘッダーのすぐ下に配置） -->
+    <!-- トップ：メンバー集合写真＋練習日時の流れるテロップ -->
     <div class="hero-media">
-      <div class="pool"></div>
-      <div class="caustics"></div>
-      <div class="deck top"></div>
-      <div class="deck bottom"></div>
-      <div class="rope r1"></div>
-      <div class="rope r2"></div>
-      <div class="rope r3"></div>
-      <div class="lane-num" style="top:12.5%">1</div>
-      <div class="lane-num" style="top:37.5%">2</div>
-      <div class="lane-num" style="top:62.5%">3</div>
-      <div class="lane-num" style="top:87.5%">4</div>
-      <div class="swimmer" style="--top:12.5%;--dur:16s;--delay:-2s" aria-hidden="true">
-        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-          <ellipse class="wake" cx="14" cy="20" rx="22" ry="5"/>
-          <ellipse class="kick k1" cx="23" cy="16" rx="4" ry="2"/>
-          <ellipse class="kick k2" cx="23" cy="24" rx="4" ry="2"/>
-          <rect class="body" x="30" y="15" width="56" height="10" rx="5"/>
-          <circle class="cap" cx="93" cy="19" r="6.5"/>
-          <rect class="arm front" x="76" y="11.5" width="30" height="5" rx="2.5"/>
-          <rect class="arm back" x="34" y="23.5" width="26" height="5" rx="2.5"/>
-        </svg>
-      </div>
-      <div class="swimmer" style="--top:37.5%;--dur:20s;--delay:-8s;--sw:var(--sat);--cap:var(--wed)" aria-hidden="true">
-        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-          <ellipse class="wake" cx="14" cy="20" rx="22" ry="5"/>
-          <ellipse class="kick k1" cx="23" cy="16" rx="4" ry="2"/>
-          <ellipse class="kick k2" cx="23" cy="24" rx="4" ry="2"/>
-          <rect class="body" x="30" y="15" width="56" height="10" rx="5"/>
-          <circle class="cap" cx="93" cy="19" r="6.5"/>
-          <rect class="arm front" x="76" y="11.5" width="30" height="5" rx="2.5"/>
-          <rect class="arm back" x="34" y="23.5" width="26" height="5" rx="2.5"/>
-        </svg>
-      </div>
-      <div class="swimmer" style="--top:62.5%;--dur:14s;--delay:-5s" aria-hidden="true">
-        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-          <ellipse class="wake" cx="14" cy="20" rx="22" ry="5"/>
-          <ellipse class="kick k1" cx="23" cy="16" rx="4" ry="2"/>
-          <ellipse class="kick k2" cx="23" cy="24" rx="4" ry="2"/>
-          <rect class="body" x="30" y="15" width="56" height="10" rx="5"/>
-          <circle class="cap" cx="93" cy="19" r="6.5"/>
-          <rect class="arm front" x="76" y="11.5" width="30" height="5" rx="2.5"/>
-          <rect class="arm back" x="34" y="23.5" width="26" height="5" rx="2.5"/>
-        </svg>
-      </div>
-      <div class="swimmer" style="--top:87.5%;--dur:18s;--delay:-12s;--sw:var(--sat);--cap:var(--wed)" aria-hidden="true">
-        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-          <ellipse class="wake" cx="14" cy="20" rx="22" ry="5"/>
-          <ellipse class="kick k1" cx="23" cy="16" rx="4" ry="2"/>
-          <ellipse class="kick k2" cx="23" cy="24" rx="4" ry="2"/>
-          <rect class="body" x="30" y="15" width="56" height="10" rx="5"/>
-          <circle class="cap" cx="93" cy="19" r="6.5"/>
-          <rect class="arm front" x="76" y="11.5" width="30" height="5" rx="2.5"/>
-          <rect class="arm back" x="34" y="23.5" width="26" height="5" rx="2.5"/>
-        </svg>
+      <img class="hero-photo" src="members.jpg" alt="春泳会のメンバー（春日市の温水プールにて）">
+      <div class="hero-tint"></div>
+      <div class="marquee" aria-label="練習日時のご案内">
+        <div class="track">
+          <span>🏊 毎週 <b>水曜日 19:40〜20:40</b>　／　<b>土曜日 19:40〜21:10</b>　｜　見学・無料体験 受付中</span>
+          <span>🏊 毎週 <b>水曜日 19:40〜20:40</b>　／　<b>土曜日 19:40〜21:10</b>　｜　見学・無料体験 受付中</span>
+        </div>
       </div>
     </div>
 
@@ -350,6 +384,56 @@ h2{text-align:center}
         <div class="point"><h3>指導歴30年のコーチ</h3><p>泳ぎの課題を見て、直すポイントを具体的に伝えます。</p></div>
         <div class="point"><h3>拍手し合えるチーム</h3><p>お互いの挑戦を認め合う、温かい雰囲気です。</p></div>
         <div class="point"><h3>レベル別のメニュー</h3><p>レベルに合わせてメニューとコースを分けて練習します。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="formcheck" style="padding-top:0">
+    <div class="wrap">
+      <h2>動画でフォームチェック</h2>
+      <p class="sub-lead">自分の泳ぎを“見える化”。</p>
+      <div class="formcheck">
+        <div class="fc-media">
+          <span class="fc-badge">● REC 撮影の様子</span>
+          <img src="practice.jpg" alt="春泳会の練習・フォームチェックの様子">
+        </div>
+        <div class="fc-body">
+          <p class="fc-catch">自分の泳ぎは、意外と見えていないもの。</p>
+          <p>春泳会では、定期的に泳ぎを<b>水中と水上の両方から動画で撮影</b>します。自分では気づきにくい動きを映像で確認でき、指導歴30年のコーチが、その人に合ったコツをやさしくアドバイス。無理なく、自分のペースで泳ぎを楽しめます。</p>
+          <ul class="fc-points">
+            <li>水中・水上の2アングルで撮影</li>
+            <li>映像だから、自分の泳ぎがよく分かる</li>
+            <li>自分のペースで、できることが少しずつ増える</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 実際に撮影した映像から切り出し -->
+      <div class="fc-sample">
+        <p class="fc-sample-title">こんな映像で、自分の泳ぎがひと目で分かる！</p>
+        <p class="fc-sample-lead">実際に練習中に撮影した映像です。</p>
+        <div class="fc-shots">
+          <figure class="fc-shot">
+            <div class="fc-media">
+              <span class="fc-badge">水中アングル</span>
+              <picture>
+                <source srcset="formcheck-underwater.webp" type="image/webp">
+                <img src="formcheck-underwater.jpg" alt="水中から撮影したクロールのフォーム" width="1920" height="1080" loading="lazy">
+              </picture>
+            </div>
+            <figcaption><b>水の中から</b>：腕の伸びや体の姿勢、キックの様子がよく分かります。</figcaption>
+          </figure>
+          <figure class="fc-shot">
+            <div class="fc-media">
+              <span class="fc-badge">水上アングル</span>
+              <picture>
+                <source srcset="formcheck-overwater.webp" type="image/webp">
+                <img src="formcheck-overwater.jpg" alt="プールサイドから撮影したクロールのフォーム" width="1920" height="1080" loading="lazy">
+              </picture>
+            </div>
+            <figcaption><b>水の上から</b>：息つぎのタイミングや、腕を回す動きを確認できます。</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
@@ -454,6 +538,7 @@ h2{text-align:center}
     <div class="wrap access">
       <div class="card">
         <h2>活動場所</h2>
+        <img class="place-photo" src="pool.jpg" alt="春日市総合スポーツセンター温水プールの屋内プール">
         <p style="margin:0"><b>春日市総合スポーツセンター温水プール</b><br>福岡県春日市大谷6-28-1</p>
         <p style="margin:8px 0 0;color:var(--muted)">毎週水曜・土曜に活動しています。コースの使い方は体験のときにお伝えします。</p>
         <div class="map-frame" id="mapFrame">
@@ -486,7 +571,11 @@ h2{text-align:center}
 </main>
 
 <footer>
-  <div class="wrap">© 春泳会（しゅんえいかい） 福岡県春日市</div>
+  <div class="wrap">
+    <p class="foot-name">春泳会（しゅんえいかい）｜福岡県春日市</p>
+    <p class="foot-note">当サイトに掲載している写真・映像・文章の無断転載・使用はご遠慮ください。</p>
+    <p class="copyright"><small>© 2026 春泳会 All Rights Reserved.</small></p>
+  </div>
 </footer>
 
 <a class="fab" id="fab" href="https://lin.ee/8lRhwSj" target="_blank" rel="noopener" aria-label="公式LINEで無料体験・見学を申し込む">
